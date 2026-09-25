@@ -8,7 +8,7 @@ alert triage and vulnerability management.
 | Node | Role | Stack |
 |---|---|---|
 | Windows 11 host | Monitored endpoint | Sysmon (SwiftOnSecurity) + Wazuh agent |
-| Ubuntu VM | SOC core | Wazuh Manager/Indexer/Dashboard, Suricata, Grafana, Greenbone/OpenVAS |
+| Cloud VM (Switzerland) | SOC core | Wazuh Manager/Indexer/Dashboard, Suricata, Grafana, Greenbone/OpenVAS |
 | Cloud VPS | Honeypot | Cowrie SSH honeypot exposed to the Internet |
 
 Nodes connected over Tailscale.
