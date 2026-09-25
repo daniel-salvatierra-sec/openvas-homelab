@@ -1,0 +1,5 @@
+*.bak*
+*.pem
+*.key
+.env
+*.dump
