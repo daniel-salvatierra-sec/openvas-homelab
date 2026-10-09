@@ -1,0 +1,21 @@
+# Secretos y claves: nunca al repo
+.env
+*.env
+*.key
+*.pem
+*.ppk
+id_*
+infomaniak_*
+*.pub.bak
+
+# Volcados y datos de escaneo (pueden contener datos reales)
+*.sql
+*.dump
+*.sql.gz
+reports/
+scans/
+
+# Python
+__pycache__/
+*.pyc
+*.bak-*
