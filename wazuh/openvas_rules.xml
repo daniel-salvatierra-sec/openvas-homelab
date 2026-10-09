@@ -1,0 +1,42 @@
+<!--
+  Reglas para los hallazgos exportados por tools/openvas_to_wazuh.py
+  Rango reservado: 101000-101009 (verificado libre en el manager, 2026-10-09).
+  Archivo NUEVO e independiente: no modifica ninguna regla existente.
+  Ubicación en el manager: /var/ossec/etc/rules/openvas_rules.xml  (root:wazuh, 660)
+
+  Niveles pensados para no generar ruido en Telegram (la integración avisa desde nivel 10):
+    Low 3 · Medium 6 · High 9 · Critical 12
+-->
+<group name="openvas,vulnerability,">
+
+  <rule id="101000" level="0">
+    <decoded_as>json</decoded_as>
+    <field name="source">^openvas$</field>
+    <description>OpenVAS: hallazgo (regla base, silenciosa)</description>
+  </rule>
+
+  <rule id="101001" level="3">
+    <if_sid>101000</if_sid>
+    <field name="severidad">^Low$</field>
+    <description>OpenVAS: vulnerabilidad de severidad baja</description>
+  </rule>
+
+  <rule id="101002" level="6">
+    <if_sid>101000</if_sid>
+    <field name="severidad">^Medium$</field>
+    <description>OpenVAS: vulnerabilidad de severidad media</description>
+  </rule>
+
+  <rule id="101003" level="9">
+    <if_sid>101000</if_sid>
+    <field name="severidad">^High$</field>
+    <description>OpenVAS: vulnerabilidad de severidad alta</description>
+  </rule>
+
+  <rule id="101004" level="12">
+    <if_sid>101000</if_sid>
+    <field name="severidad">^Critical$</field>
+    <description>OpenVAS: vulnerabilidad de severidad crítica</description>
+  </rule>
+
+</group>

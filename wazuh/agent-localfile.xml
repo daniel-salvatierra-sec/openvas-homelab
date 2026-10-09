@@ -1,0 +1,9 @@
+<!--
+  Fragmento para añadir en /var/ossec/etc/ossec.conf del AGENTE de soc-openvas-01
+  (dentro de <ossec_config>, junto a los demás <localfile>).
+  Haz copia con fecha de ossec.conf antes de editarlo.
+-->
+<localfile>
+  <log_format>json</log_format>
+  <location>/var/log/openvas/results.json</location>
+</localfile>
