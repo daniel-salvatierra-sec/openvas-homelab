@@ -33,7 +33,7 @@ microempresas.
 | [A](docs/01-fase-a-vm-infomaniak.md) | VM en Infomaniak, Tailscale, UFW | ✅ |
 | [B](docs/02-fase-b-docker-greenbone.md) | Docker, Greenbone, feeds y dos escaneos | ✅ |
 | [C](docs/03-fase-c-integracion-wazuh.md) | Exportador, reglas y agente Wazuh | ✅ |
-| [D](docs/04-fase-d-dashboard-grafana.md) | Dashboard de Grafana | 🔄 generado, falta validar |
+| [D](docs/04-fase-d-dashboard-grafana.md) | Dashboard de Grafana | ✅ validado con datos reales |
 
 ## Contenido
 

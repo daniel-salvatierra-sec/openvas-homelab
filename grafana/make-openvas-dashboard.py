@@ -74,9 +74,15 @@ def sev(nivel):
     return BASE + ' AND data.severidad:"%s"' % nivel
 
 
-def colores_por_nombre(nombres):
-    return [{"matcher": {"id": "byName", "options": n},
-             "properties": [{"id": "color", "value": {"fixedColor": c, "mode": "fixed"}}]} for n, c in nombres]
+def colores_por_nombre(nombres, traducir=False):
+    """Color fijo por nombre de serie; con traducir=True además muestra el nombre en español."""
+    out = []
+    for n, c in nombres:
+        props = [{"id": "color", "value": {"fixedColor": c, "mode": "fixed"}}]
+        if traducir and n in ES:
+            props.append({"id": "displayName", "value": ES[n]})
+        out.append({"matcher": {"id": "byName", "options": n}, "properties": props})
+    return out
 
 
 def panel_tiempo():
@@ -100,9 +106,9 @@ def panel_tiempo():
 def panel_pie():
     return {
         "id": 7, "type": "piechart", "title": "Reparto por severidad", "datasource": DS,
-        "gridPos": {"h": 8, "w": 8, "x": 0, "y": 12},
+        "gridPos": {"h": 8, "w": 6, "x": 0, "y": 12},
         "fieldConfig": {"defaults": {"color": {"mode": "palette-classic"}, "custom": {"hideFrom": {"legend": False, "tooltip": False, "viz": False}}},
-                        "overrides": colores_por_nombre(list(COLORES.items()))},
+                        "overrides": colores_por_nombre(list(COLORES.items()), traducir=True)},
         "options": {"displayLabels": ["percent"], "legend": {"displayMode": "table", "placement": "right", "showLegend": True, "values": ["value"]},
                     "pieType": "donut", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": True},
                     "sort": "desc", "tooltip": {"hideZeros": False, "mode": "single", "sort": "none"}},
@@ -123,7 +129,7 @@ def panel_barras(id_, titulo, campo, x, w, color, desc):
                     "legend": {"calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": False},
                     "orientation": "horizontal", "showValue": "auto", "stacking": "none",
                     "tooltip": {"hideZeros": False, "mode": "single", "sort": "none"},
-                    "xTickLabelMaxLength": 40, "xTickLabelRotation": 0, "xTickLabelSpacing": 0},
+                    "xTickLabelMaxLength": 70, "xTickLabelRotation": 0, "xTickLabelSpacing": 0},
         "targets": [target(BASE, [terms(campo)])],
     }
 
@@ -141,7 +147,7 @@ def panel_tabla():
                              "properties": [{"id": "custom.cellOptions", "value": {"type": "color-background"}},
                                             {"id": "mappings", "value": [{"type": "value", "options": mapeo}]},
                                             {"id": "custom.width", "value": 110}]},
-                            {"matcher": {"id": "byName", "options": "CVSS"}, "properties": [{"id": "custom.width", "value": 70}]},
+                            {"matcher": {"id": "byName", "options": "CVSS"}, "properties": [{"id": "custom.width", "value": 70}, {"id": "decimals", "value": 1}]},
                             {"matcher": {"id": "byName", "options": "Solución"}, "properties": [{"id": "custom.width", "value": 420}]}]},
         "options": {"cellHeight": "sm", "showHeader": True, "sortBy": [{"desc": True, "displayName": "Hora"}]},
         "targets": [target(BASE, [], [{"id": "1", "type": "raw_data", "settings": {"size": "100"}}])],
@@ -166,8 +172,8 @@ def main():
         stat(5, "Bajos", sev("Low"), 19, 5, COLORES["Low"]),
         panel_tiempo(),
         panel_pie(),
-        panel_barras(8, "Hallazgos por cliente", "data.cliente", 8, 6, "#5794F2", "Cuántos hallazgos tiene cada cliente."),
-        panel_barras(9, "Vulnerabilidades más frecuentes", "data.nombre", 14, 10, "#B877D9", "Las 10 vulnerabilidades que más se repiten."),
+        panel_barras(8, "Hallazgos por cliente", "data.cliente", 6, 5, "#5794F2", "Cuántos hallazgos tiene cada cliente."),
+        panel_barras(9, "Vulnerabilidades más frecuentes", "data.nombre", 11, 13, "#B877D9", "Las 10 vulnerabilidades que más se repiten."),
         panel_tabla(),
     ]
     dash = {

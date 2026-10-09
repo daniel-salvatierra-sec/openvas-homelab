@@ -1,6 +1,6 @@
 # Fase D — Dashboard de Grafana
 
-Fecha: 2026-10-09 · Estado: **generado, pendiente de importar y validar en Grafana**
+Fecha: 2026-10-09 · Estado: **validado con datos reales**
 
 ## Resultado de la cadena de datos (verificado)
 
@@ -43,9 +43,22 @@ Decisiones:
 - **Limitación conocida:** un reescaneo vuelve a exportar los hallazgos que siguen abiertos,
   así que cuentan de nuevo. El rango de tiempo decide qué escaneos se ven.
 
+## Validación
+
+Importado en el Grafana del manager del lab (*Dashboards → New → Import*) y comprobado con los
+dos hallazgos reales de `demo-pc02`: contadores (2 totales, 2 Bajos), serie temporal, donut,
+barras por cliente y por vulnerabilidad, y tabla de detalle con la solución recomendada.
+
+Ajustes tras la primera vista: CVSS con un decimal, panel de vulnerabilidades más ancho para que
+no se corten los nombres y leyenda del donut en español (`displayName` por serie; el mapeo de
+valores no renombra las leyendas).
+
+> **Nota:** el desplegable de fuente de datos listaba tres fuentes con nombres genéricos
+> (`grafana-opensearch-datasource`, `-1` y una de vulnerabilidades). Conviene renombrarlas
+> (`Wazuh Alertas`, `Wazuh Vulnerabilidades`) para no elegir mal.
+
 ## Pendiente
 
-- Importar el JSON en Grafana y validar paneles con datos reales
 - Decidir a qué manager reporta el escáner en el servicio real: hoy está en el manager del lab;
   para clientes debe ir al manager de producción (nunca mezclar lab y clientes). El dashboard
   no cambia: solo la fuente de datos.

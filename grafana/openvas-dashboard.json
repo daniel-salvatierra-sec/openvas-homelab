@@ -656,7 +656,7 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 8,
+        "w": 6,
         "x": 0,
         "y": 12
       },
@@ -686,6 +686,10 @@
                   "fixedColor": "#F2495C",
                   "mode": "fixed"
                 }
+              },
+              {
+                "id": "displayName",
+                "value": "Crítica"
               }
             ]
           },
@@ -701,6 +705,10 @@
                   "fixedColor": "#FF780A",
                   "mode": "fixed"
                 }
+              },
+              {
+                "id": "displayName",
+                "value": "Alta"
               }
             ]
           },
@@ -716,6 +724,10 @@
                   "fixedColor": "#FADE2A",
                   "mode": "fixed"
                 }
+              },
+              {
+                "id": "displayName",
+                "value": "Media"
               }
             ]
           },
@@ -731,6 +743,10 @@
                   "fixedColor": "#5794F2",
                   "mode": "fixed"
                 }
+              },
+              {
+                "id": "displayName",
+                "value": "Baja"
               }
             ]
           }
@@ -807,8 +823,8 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 6,
-        "x": 8,
+        "w": 5,
+        "x": 6,
         "y": 12
       },
       "fieldConfig": {
@@ -866,7 +882,7 @@
           "mode": "single",
           "sort": "none"
         },
-        "xTickLabelMaxLength": 40,
+        "xTickLabelMaxLength": 70,
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 0
       },
@@ -914,8 +930,8 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 10,
-        "x": 14,
+        "w": 13,
+        "x": 11,
         "y": 12
       },
       "fieldConfig": {
@@ -973,7 +989,7 @@
           "mode": "single",
           "sort": "none"
         },
-        "xTickLabelMaxLength": 40,
+        "xTickLabelMaxLength": 70,
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 0
       },
@@ -1106,6 +1122,10 @@
               {
                 "id": "custom.width",
                 "value": 70
+              },
+              {
+                "id": "decimals",
+                "value": 1
               }
             ]
           },
