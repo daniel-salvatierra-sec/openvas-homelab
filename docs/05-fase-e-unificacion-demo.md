@@ -1,6 +1,6 @@
 # Fase E — Unificación con los dashboards de Wazuh y paso al entorno de demo
 
-Fecha: 2026-10-09 · Estado: **en curso** (datos verificados en el manager de demo; falta validar el dashboard)
+Fecha: 2026-10-09 · Estado: **completada para el entorno de demo**
 
 ## E1 · Una sección de OpenVAS dentro de los dashboards del proyecto
 
@@ -50,9 +50,31 @@ sudo systemctl restart wazuh-agent
 
 Verificado: dos alertas de la regla 101001 en el manager de demo, agente `soc-openvas-01`.
 
+## E5 · Despliegue en el Grafana de demo
+
+El dashboard de demo se despliega por *file provisioning* (JSON en `/var/lib/grafana/dashboards/`,
+propiedad de `grafana`, modo 640; Grafana lo relee solo en ~30 s), con copia con fecha del anterior.
+
+> **Lo que falló:** el primer intento fue importar el JSON desde la interfaz del Grafana del
+> **laboratorio**. Salió todo vacío porque el dashboard de demo usa el datasource `wazuh-demo-alerts`,
+> que solo existe en el Grafana del servidor de demo. Un dashboard solo ve las fuentes de datos de
+> su propio Grafana. Se borró el importado por error y se desplegó en el servidor correcto.
+
+Resultado: la sección **Vulnerabilidades de red (OpenVAS)** muestra los 2 hallazgos Low del
+equipo de la demo.
+
+## E6 · El escáner no es un cliente
+
+Como agente del manager de demo, `soc-openvas-01` aparecía en "Agentes que reportaron", "Alertas
+por agente" y en la tabla de vulnerabilidades críticas de Wazuh (con los CVE del kernel de la
+propia VM). En una demo eso enseñaría infraestructura del operador como si fuera de un cliente.
+Los generadores de dashboards excluyen ahora `agent.name:"soc-openvas-01"` de todos los paneles
+de Wazuh; los de la sección OpenVAS no llevan esa exclusión.
+
 ## Pendiente
 
-- Importar el dashboard de demo regenerado y validar la sección de OpenVAS con `c901-*`.
+- Comprobar el selector de cliente de la demo: `c901-*` debe dejar 2 hallazgos y `c900-*` ninguno.
+- Revisar los CVE del kernel de la propia VM del escáner (actualizar y reiniciar si procede).
 - Limpiar el agente antiguo del manager del laboratorio (quedó desconectado).
 - Equivalente para producción cuando haya clientes reales: agente propio hacia el manager de
   producción y los informes en PDF mensuales.
