@@ -55,3 +55,53 @@ cuentan contra el crédito de almacenamiento).
 > **Dos fallos de comando durante la tarea**, los dos por ejecutarlos en la máquina equivocada:
 > `agent_control` es del *manager*, no del agente, y `ssh <alias>` desde el laptop sirve para
 > lanzar un comando remoto sin abrir sesión. Conviene indicar siempre en qué máquina va cada comando.
+
+## 2026-10-12 · Actualización del feed, cuelgue de la VM y swap
+
+**Hallazgo:** tras el reinicio, *Administration → Feed Status* mostraba las cuatro filas como
+`4 days old` (versión del 8 de octubre). Según la documentación oficial, los contenedores de
+datos **copian a los volúmenes el feed que viene dentro de su imagen cada vez que arrancan**;
+no se sincronizan solos. Para actualizar el feed hay que descargar imágenes nuevas y
+recrear los contenedores de datos:
+
+```bash
+df -h /; docker system df                                  # comprobar espacio antes (imágenes + volúmenes)
+docker compose -f ~/greenbone-community-edition/compose.yaml pull
+docker compose -f ~/greenbone-community-edition/compose.yaml up -d
+```
+
+Sin `down`, sin `-v` y sin `prune`. Tras el `up -d`, `gvmd` recarga la caché de VTs
+(**45-50 minutos**, con *Update in progress* en *Feed Status*). Resultado: las cuatro filas en
+**Current** con versión del día.
+
+**Incidente:** durante el primer `up -d`, mientras `vulnerability-tests` copiaba sus datos, se
+cortó la sesión SSH y la VM dejó de responder por Tailscale (el nodo apareció desconectado).
+Según Infomaniak la instancia seguía *Active* y *En fonctionnement*. El log de consola
+(*Journal*) solo contenía el arranque de esa mañana, sin `Out of memory` ni pánico del kernel.
+**La causa no se confirmó**; la hipótesis de trabajo fue saturación de memoria o de disco (8 GB de
+RAM y **sin swap**) durante una copia de ~38 GB. No había otra vía de acceso: el SSH público
+está cerrado en el grupo de seguridad y en UFW, y no hay contraseña de usuario para la consola.
+
+**Recuperación:** reinicio **suave** desde el panel (*Redémarrer l'instance*), nunca el
+forzado (*matériellement*), y menos aún *Reconstruire* o *Supprimer*. Antes se verificó en cuál
+de las máquinas estaba abierto el menú. Tras volver, los contenedores de datos no arrancan solos
+(política `no`) y se repitió el `up -d`, esta vez dentro de `tmux`.
+
+**Medidas para que no se repita:**
+
+- **Swap de 2 GB**, con copia de `fstab` antes de tocarlo:
+
+```bash
+sudo cp /etc/fstab /etc/fstab.bak-AAAAMMDD
+sudo fallocate -l 2G /swapfile && sudo chmod 600 /swapfile && sudo mkswap /swapfile && sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+```
+
+  Revertir: `sudo swapoff /swapfile && sudo rm /swapfile` y restaurar `fstab`.
+- **Operaciones largas dentro de `tmux`** (`tmux new -s feeds`; separar con `Ctrl+b d`;
+  volver con `tmux attach -t feeds`), para que un corte de SSH no las interrumpa.
+- Vigilar el disco: pasó de 28 GB a 14 GB libres durante la actualización, porque las imágenes
+  viejas conviven con las nuevas hasta limpiarlas.
+
+**Dos de los fallos fueron de método:** lanzar comandos del *manager* en la VM del agente y
+pegar marcadores sin sustituir. Conviene nombrar siempre la máquina de cada comando.
