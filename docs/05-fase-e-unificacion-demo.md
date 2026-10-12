@@ -71,9 +71,18 @@ propia VM). En una demo eso enseñaría infraestructura del operador como si fue
 Los generadores de dashboards excluyen ahora `agent.name:"soc-openvas-01"` de todos los paneles
 de Wazuh; los de la sección OpenVAS no llevan esa exclusión.
 
+## E7 · Verificación del selector de cliente (2026-10-12)
+
+En el dashboard de demo, con rango de 7 días: cliente `c901` → 2 hallazgos en la sección OpenVAS;
+cliente `c900` → 0. El snapshot `openvas-operativo` de la VM del escáner figura como *Actif*.
+Tras 3 días sin reiniciar, los 14 contenedores de Greenbone siguen `Up`.
+
+> **Nota:** una caída aislada del túnel SSH (`Connection timed out`) se resolvió con
+> `tailscale ping`, que reabre el camino directo tras un periodo de inactividad. No era un
+> problema de la VM.
+
 ## Pendiente
 
-- Comprobar el selector de cliente de la demo: `c901-*` debe dejar 2 hallazgos y `c900-*` ninguno.
 - Revisar los CVE del kernel de la propia VM del escáner (actualizar y reiniciar si procede).
 - Limpiar el agente antiguo del manager del laboratorio (quedó desconectado).
 - Equivalente para producción cuando haya clientes reales: agente propio hacia el manager de
