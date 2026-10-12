@@ -105,3 +105,10 @@ echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 
 **Dos de los fallos fueron de método:** lanzar comandos del *manager* en la VM del agente y
 pegar marcadores sin sustituir. Conviene nombrar siempre la máquina de cada comando.
+
+**Limpieza posterior:** con el feed en *Current*, se listaron las imágenes sin etiqueta
+(`docker images -f dangling=true`, todas de hace 4 días o más) y se ejecutó `docker image prune`,
+que no borra imágenes usadas por contenedores ni toca volúmenes. Recuperó 7,78 GB. El disco quedó en
+49% usado (40 GB libres) y los 16 servicios siguieron `Up`. Antes de limpiar ya había bajado a
+58% por sí solo, porque al recrear los contenedores de datos los volúmenes sustituyeron el
+contenido anterior: el pico de uso de disco fue temporal.
