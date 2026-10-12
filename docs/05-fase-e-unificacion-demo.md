@@ -81,9 +81,15 @@ Tras 3 días sin reiniciar, los 14 contenedores de Greenbone siguen `Up`.
 > `tailscale ping`, que reabre el camino directo tras un periodo de inactividad. No era un
 > problema de la VM.
 
+## E8 · Limpieza del agente antiguo en el manager del laboratorio (2026-10-12)
+
+Comprobado en solo lectura (`agent_control -i 008`: nombre, versión y estado *Disconnected*),
+copia con fecha de `client.keys` y eliminación con `manage_agents -r 008`. Los demás agentes
+quedaron intactos. Eliminar el agente no borra sus alertas ya indexadas, así que el dashboard de
+OpenVAS del laboratorio conserva su historial.
+
 ## Pendiente
 
 - Revisar los CVE del kernel de la propia VM del escáner (actualizar y reiniciar si procede).
-- Limpiar el agente antiguo del manager del laboratorio (quedó desconectado).
 - Equivalente para producción cuando haya clientes reales: agente propio hacia el manager de
   producción y los informes en PDF mensuales.
