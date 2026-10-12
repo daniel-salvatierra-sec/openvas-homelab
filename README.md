@@ -35,6 +35,7 @@ microempresas.
 | [C](docs/03-fase-c-integracion-wazuh.md) | Exportador, reglas y agente Wazuh | ✅ |
 | [D](docs/04-fase-d-dashboard-grafana.md) | Dashboard de Grafana | ✅ validado con datos reales |
 | [E](docs/05-fase-e-unificacion-demo.md) | Unificación con los dashboards de Wazuh y paso a demo | ✅ demo |
+| [Mant.](docs/06-mantenimiento.md) | Kernel, reinicios y snapshots | 🔄 |
 
 ## Contenido
 
